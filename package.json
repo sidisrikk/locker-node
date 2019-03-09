@@ -1,0 +1,21 @@
+{
+  "name": "locker-node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "eslint": "^5.15.1",
+    "esm": "^3.2.14",
+    "inquirer": "^6.2.2",
+    "kafka-node": "^4.0.2",
+    "node-emoji": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  }
+}
