@@ -2,7 +2,7 @@ import ask from './coinInsert/terminalInput';
 
 const kafka = require('kafka-node');
 
-const LOCKER1_TOPIC = 'locker-unit';
+const LOCKER1_TOPIC = 'locker-info';
 const PARTITION_NUM = 0;
 
 const { Consumer } = kafka;
@@ -18,7 +18,7 @@ const consumer = new Consumer(
 );
 
 consumer.on('message', (message) => {
-  console.log(message);
+  console.log(JSON.parse(message.value));
   // ask();
 });
 
