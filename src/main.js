@@ -6,14 +6,14 @@ const LOCKER1_TOPIC = 'locker-unit';
 const PARTITION_NUM = 0;
 
 const { Consumer } = kafka;
-const client = new kafka.KafkaClient({ kafkaHost: 'localhost:9092' });
+const client = new kafka.KafkaClient({ 'kafkaHost': 'localhost:9092' });
 const consumer = new Consumer(
   client,
   [
-    { topic: LOCKER1_TOPIC, partition: PARTITION_NUM },
+    { 'topic': LOCKER1_TOPIC, 'partition': PARTITION_NUM },
   ],
   {
-    autoCommit: true,
+    'autoCommit': true,
   },
 );
 
