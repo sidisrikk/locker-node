@@ -33,13 +33,13 @@ consumer.on('offsetOutOfRange', (err) => {
 });
 
 
-const unlockUnit = async () => {
-  const totolCost = 100;
+const unlockUnit = async (totolCost, unit) => {
   const totolCoinValue = await ask(totolCost);
   console.log(`Insert ${totolCoinValue} BAHT`);
 
   // success unlock
-  mutateFreeUnit(6);
+  mutateFreeUnit(unit);
   console.log(`change coin :${JSON.stringify(calCoinChange(totolCoinValue - totolCost))}`);
 };
-unlockUnit(6);
+// TODO click unit by webUI to call this func
+unlockUnit(100, 6);
