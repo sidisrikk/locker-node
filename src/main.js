@@ -1,4 +1,6 @@
 import ask from './coinInsert/terminalInput';
+import mutateFreeUnit from './graphql/connect';
+import calCoinChange from './coinchange';
 
 const kafka = require('kafka-node');
 
@@ -18,8 +20,8 @@ const consumer = new Consumer(
 );
 
 consumer.on('message', (message) => {
-  console.log(JSON.parse(message.value));
-  // ask();
+  // TODO update interface user available/reserved
+  // console.log(JSON.parse(message.value));
 });
 
 consumer.on('error', (err) => {
@@ -29,3 +31,15 @@ consumer.on('error', (err) => {
 consumer.on('offsetOutOfRange', (err) => {
   console.log('offsetOutOfRange:', err);
 });
+
+
+const unlockUnit = async (totolCost, unit) => {
+  const totolCoinValue = await ask(totolCost);
+  console.log(`Insert ${totolCoinValue} BAHT`);
+
+  // success unlock
+  mutateFreeUnit(unit);
+  console.log(`change coin :${JSON.stringify(calCoinChange(totolCoinValue - totolCost))}`);
+};
+// TODO click unit by webUI to call this func
+unlockUnit(100, 6);
