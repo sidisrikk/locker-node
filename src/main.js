@@ -21,7 +21,7 @@ const consumer = new Consumer(
 
 consumer.on('message', (message) => {
   // TODO update interface user available/reserved
-  console.log(JSON.parse(message.value));
+  // console.log(JSON.parse(message.value));
 });
 
 consumer.on('error', (err) => {
