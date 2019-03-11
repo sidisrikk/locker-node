@@ -1,6 +1,7 @@
 import express from 'express';
 import { getLockerUnitInfo } from './lockerData';
 import unlockUnit from './coinInsert/terminalInput';
+import { mutateReserveUnit } from './graphql/connect';
 
 const app = express();
 const server = require('http').createServer(app);
@@ -26,11 +27,18 @@ io.on('connection', (socket) => {
     console.log(`req to unlock ${req.no}`);
     // reserve success checkPassword(msg)
     if (req.passcode === getLockerUnitInfo().lockerInfo.unit[parseInt(req.no, 10) - 1].passcode) {
-      // fix 100 BAHT
+      // cost random 0-999
       // TODO calculate upon time
       await unlockUnit(Math.floor(Math.random() * 1000), req.no);
       io.emit('unlock', req.no);
     }
+  });
+
+  socket.on('reserved', async (msg) => {
+    const req = JSON.parse(msg);
+    console.log(`reserve ${req.no}`);
+    // mutation
+    mutateReserveUnit(parseInt(req.no, 10));
   });
 });
 server.listen(port, () => console.log(`Web rdy port ${port}`));

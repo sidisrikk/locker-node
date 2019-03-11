@@ -27,19 +27,29 @@
         for (i = 0; i < parseInt(msg) - 1; i++) {
           $tmp = $tmp.next('Unit')
         }
-        $tmp.first().attr("disabled", true).css('background-color', 'gray');
+        $tmp.first().attr("status", 'reserved').css('background-color', 'gray');
       });
       socket.on('unlock', function (msg) {
         $tmp = $("Unit")
         for (i = 0; i < parseInt(msg) - 1; i++) {
           $tmp = $tmp.next('Unit')
         }
-        $tmp.first().attr("disabled", false).css('background-color', '#F5F5F5');
+        $tmp.first().attr("status", 'available').css('background-color', '#F5F5F5');
       });
       $("unit").click(function () {
         console.log('clicked!' + $(this).text());
         selectedUnit = $(this).text()
-        $('#exampleModal').modal('toggle')
+
+        // toggle passcode form
+        if ($(this).attr("status") === 'reserved') {
+          $('#unlockModal').modal('toggle')
+        } else {
+          //toggle reserved form
+          socket.emit('reserved',
+          JSON.stringify({
+            no: selectedUnit
+          }))
+        }
       });
       $("#tryUnlock").click(function () {
         socket.emit('unlock',
@@ -47,7 +57,7 @@
             passcode: $("#passcodeInput").val(),
             no: selectedUnit
           }))
-        $('#exampleModal').modal('toggle')
+        $('#unlockModal').modal('toggle')
         $('#passcodeInput').val('');
       });
     });
@@ -70,7 +80,7 @@
     <Unit>12</Unit>
   </div>
   <!-- Modal -->
-  <div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  <div class="modal fade " id="unlockModal" tabindex="-1" role="dialog" aria-labelledby="unlockModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -86,6 +96,8 @@
       </div>
     </div>
   </div>
+
+
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import mutateFreeUnit from '../graphql/connect';
+import { mutateFreeUnit } from '../graphql/connect';
 import calCoinChange from './coinchange';
 
 
