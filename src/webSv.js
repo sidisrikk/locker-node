@@ -23,10 +23,12 @@ io.on('connection', (socket) => {
 
   socket.on('unlock', async (msg) => {
     const req = JSON.parse(msg);
+    console.log(`req to unlock ${req.no}`);
     // reserve success checkPassword(msg)
     if (req.passcode === getLockerUnitInfo().lockerInfo.unit[parseInt(req.no, 10) - 1].passcode) {
-      // insert coin
-      await unlockUnit(100, 6);
+      // fix 100 BAHT
+      // TODO calculate upon time
+      await unlockUnit(Math.floor(Math.random() * 1000), req.no);
       io.emit('unlock', req.no);
     }
   });

@@ -1,6 +1,7 @@
 import inquirer from 'inquirer';
 import mutateFreeUnit from '../graphql/connect';
-import calCoinChange from '../coinchange';
+import calCoinChange from './coinchange';
+
 
 const questions = [
   {
@@ -27,8 +28,9 @@ const unlockUnit = async (totolCost, unit) => {
   console.log(`Insert ${totolCoinValue} BAHT`);
 
   // success unlock
-  mutateFreeUnit(unit);
+  mutateFreeUnit(parseInt(unit, 10));
   console.log(`change coin :${JSON.stringify(calCoinChange(totolCoinValue - totolCost))}`);
+  return true;
 };
 
 export default unlockUnit;
