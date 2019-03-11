@@ -36,10 +36,15 @@ const kafkaClientStart = offset.fetchLatestOffsets([LOCKER1_TOPIC], (err, offset
 
   consumer.on('message', (message) => {
     // console.log(message.value);
-    setLockerUnitInfo(JSON.parse(message.value));
-    JSON.parse(message.value).lockerInfo.unit.forEach((i) => {
-      webSocket.emit((i.status === 'reserved') ? 'reserved' : 'unlock', i.no);
-    });
+    // TODO makesure right data format
+    try {
+      setLockerUnitInfo(JSON.parse(message.value));
+      JSON.parse(message.value).lockerInfo.unit.forEach((i) => {
+        webSocket.emit((i.status === 'reserved') ? 'reserved' : 'unlock', i.no);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   consumer.on('error', (err) => {
