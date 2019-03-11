@@ -1,6 +1,8 @@
 import ask from './coinInsert/terminalInput';
 import mutateFreeUnit from './graphql/connect';
 import calCoinChange from './coinchange';
+import webSv, { io } from './webSv';
+import { setLockerUnitInfo, getLockerUnitInfo } from './lockerData';
 
 const kafka = require('kafka-node');
 
@@ -22,6 +24,10 @@ const consumer = new Consumer(
 consumer.on('message', (message) => {
   // TODO update interface user available/reserved
   // console.log(JSON.parse(message.value));
+  setLockerUnitInfo(JSON.parse(message.value));
+  JSON.parse(message.value).lockerInfo.unit.forEach((i) => {
+    io.emit((i.status === 'reserved') ? 'reserved' : 'unlock', i.no);
+  });
 });
 
 consumer.on('error', (err) => {
@@ -42,4 +48,6 @@ const unlockUnit = async (totolCost, unit) => {
   console.log(`change coin :${JSON.stringify(calCoinChange(totolCoinValue - totolCost))}`);
 };
 // TODO click unit by webUI to call this func
-unlockUnit(100, 6);
+// unlockUnit(100, 6);
+
+webSv();

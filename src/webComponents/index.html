@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Socket.IO chat</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="eiei.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function () {
+      var socket = io();
+      var selectedUnit;
+      socket.on('reserved', function (msg) {
+        $tmp = $("Unit")
+        for (i = 0; i < parseInt(msg) - 1; i++) {
+          $tmp = $tmp.next('Unit')
+        }
+        $tmp.first().attr("disabled", false).css('background-color', 'gray');
+      });
+      socket.on('unlock', function (msg) {
+        $tmp = $("Unit")
+        for (i = 0; i < parseInt(msg) - 1; i++) {
+          $tmp = $tmp.next('Unit')
+        }
+        $tmp.first().attr("disabled", true).css('background-color', '#F5F5F5');
+      });
+      $("unit").click(function () {
+        console.log('clicked!' + $(this).text());
+        selectedUnit = $(this).text()
+        $('#exampleModal').modal('toggle')
+      });
+      $("#tryUnlock").click(function () {
+        socket.emit('unlock',
+          JSON.stringify({
+            passcode: $("#passcodeInput").val(),
+            no: selectedUnit
+          }))
+        $('#exampleModal').modal('toggle')
+        $('#passcodeInput').val('');
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div class="flex-container">
+    <Unit>1</Unit>
+    <Unit>2</Unit>
+    <Unit>3</Unit>
+    <Unit>4</Unit>
+    <Unit>5</Unit>
+    <Unit>6</Unit>
+    <Unit>7</Unit>
+    <Unit>8</Unit>
+    <Unit>9</Unit>
+    <Unit>10</Unit>
+    <Unit>11</Unit>
+    <Unit>12</Unit>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <input type="number" class="form-control" placeholder="Enter passcode" aria-label="Recipient's username"
+              aria-describedby="basic-addon2" id="passcodeInput">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" id="tryUnlock">Press to Unlock</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
