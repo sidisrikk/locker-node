@@ -27,14 +27,14 @@
         for (i = 0; i < parseInt(msg) - 1; i++) {
           $tmp = $tmp.next('Unit')
         }
-        $tmp.first().attr("disabled", false).css('background-color', 'gray');
+        $tmp.first().attr("disabled", true).css('background-color', 'gray');
       });
       socket.on('unlock', function (msg) {
         $tmp = $("Unit")
         for (i = 0; i < parseInt(msg) - 1; i++) {
           $tmp = $tmp.next('Unit')
         }
-        $tmp.first().attr("disabled", true).css('background-color', '#F5F5F5');
+        $tmp.first().attr("disabled", false).css('background-color', '#F5F5F5');
       });
       $("unit").click(function () {
         console.log('clicked!' + $(this).text());
