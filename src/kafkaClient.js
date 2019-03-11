@@ -1,5 +1,5 @@
 import kafka from 'kafka-node';
-import { io } from './webSv';
+import webSocket from './webSv';
 import { setLockerUnitInfo } from './lockerData';
 
 
@@ -38,7 +38,7 @@ const kafkaClientStart = offset.fetchLatestOffsets([LOCKER1_TOPIC], (err, offset
     // console.log(message.value);
     setLockerUnitInfo(JSON.parse(message.value));
     JSON.parse(message.value).lockerInfo.unit.forEach((i) => {
-      io.emit((i.status === 'reserved') ? 'reserved' : 'unlock', i.no);
+      webSocket.emit((i.status === 'reserved') ? 'reserved' : 'unlock', i.no);
     });
   });
 

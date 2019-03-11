@@ -33,6 +33,4 @@ io.on('connection', (socket) => {
 });
 server.listen(port, () => console.log(`Web rdy port ${port}`));
 
-export {
-  io,
-};
+export default io;
