@@ -7,11 +7,14 @@
     "start": "node src/index.js"
   },
   "dependencies": {
+    "dotenv": "^6.2.0",
     "eslint": "^5.15.1",
     "esm": "^3.2.14",
+    "express": "^4.16.4",
+    "graphql-request": "^1.8.2",
     "inquirer": "^6.2.2",
     "kafka-node": "^4.0.2",
-    "node-emoji": "^1.10.0"
+    "socket.io": "^2.2.0"
   },
   "devDependencies": {
     "eslint": "^5.15.1",

@@ -1,33 +1,36 @@
-const inquirer = require('inquirer');
-const emoji = require('node-emoji')
-const output = [];
+import inquirer from 'inquirer';
+import { mutateFreeUnit } from '../graphql/connect';
+import calCoinChange from './coinchange';
+
 
 const questions = [
   {
-    type: 'list',
-    name: 'insertedCoin',
-    message: 'which\'s coin?',
-    choices: ['1', '2', '5', '10', '20', '50', '100', '500', '1000']
+    'type': 'list',
+    'name': 'insertedCoin',
+    'message': 'which\'s coin?',
+    'choices': ['1', '2', '5', '10', '20', '50', '100', '500', '1000'],
   },
-  {
-    type: 'confirm',
-    name: 'insertCoinAgain',
-    message: 'Insert another Coin ?',
-    default: true
-  }
 ];
 
-const ask = () => {
-  inquirer.prompt(questions).then(answers => {
-    output.push(answers.insertedCoin);
-    if (answers.insertCoinAgain) {
-      ask();
-    } else {
-      console.log('[]\t', output.join(', '));
-      console.log('Sum:\t', output.reduce((sum, i) => parseInt(sum) + parseInt(i)));
-    }
-  });
+async function ask(totolCost) {
+  let sum = 0;
+  console.log(`Please insert ${totolCost} BAHT`);
+  while (sum < totolCost) {
+    // eslint-disable-next-line no-await-in-loop
+    const answers = await inquirer.prompt(questions);
+    sum += parseInt(answers.insertedCoin, 10);
+  }
+  return sum;
 }
 
-export default ask;
+const unlockUnit = async (totolCost, unit) => {
+  const totolCoinValue = await ask(totolCost);
+  console.log(`Insert ${totolCoinValue} BAHT`);
 
+  // success unlock
+  mutateFreeUnit(parseInt(unit, 10));
+  console.log(`change coin :${JSON.stringify(calCoinChange(totolCoinValue - totolCost))}`);
+  return true;
+};
+
+export default unlockUnit;
