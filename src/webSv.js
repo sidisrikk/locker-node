@@ -1,5 +1,6 @@
 import express from 'express';
 import { getLockerUnitInfo } from './lockerData';
+import unlockUnit from './coinInsert/terminalInput';
 
 const app = express();
 const server = require('http').createServer(app);
@@ -20,15 +21,18 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('unlock', (msg) => {
+  socket.on('unlock', async (msg) => {
     const req = JSON.parse(msg);
     // reserve success checkPassword(msg)
     if (req.passcode === getLockerUnitInfo().lockerInfo.unit[parseInt(req.no, 10) - 1].passcode) {
+      // insert coin
+      await unlockUnit(100, 6);
       io.emit('unlock', req.no);
     }
   });
 });
+server.listen(port, () => console.log(`Web rdy port ${port}`));
+
 export {
   io,
 };
-export default () => server.listen(port, () => console.log(`Web rdy port ${port}`));
